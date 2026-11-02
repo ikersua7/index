@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Wardrobe - Armario & Outfits</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkbg: '#0b0b0e',
+                        darkcard: '#141419',
+                        darkborder: '#262630',
+                        ikerAccent: '#3b82f6',
+                        ikerGlow: '#1d4ed8',
+                        saraAccent: '#ec4899',
+                        saraGlow: '#be185d'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts Inter & FontAwesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0b0e;
+            color: #f3f4f6;
+        }
+        /* Glassmorphism custom effects */
+        .glass-panel {
+            background: rgba(20, 20, 25, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-card {
+            background: rgba(26, 26, 34, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b0b0e;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #262630;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3b3b4f;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-blue-500 selection:text-white">
+
+    <!-- TOP HEADER / NAVBAR -->
+    <header class="sticky top-0 z-40 glass-panel border-b border-darkborder shadow-2xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Logo & Brand -->
+                <div class="flex items-center space-x-3">
+                    <div id="brand-icon" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white shadow-lg shadow-blue-500/20 transition-all duration-300">
+                        <i class="fa-solid fa-shirt text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+                            SMART WARDROBE <span class="text-xs px-2 py-0.5 rounded-full bg-white/10 text-gray-300 font-normal">v2.5</span>
+                        </h1>
+                        <p class="text-xs text-gray-400">Armario Inteligente & Stylist</p>
+                    </div>
+                </div>
+
+                <!-- USER SWITCHER (Iker / Sara) -->
+                <div class="flex items-center bg-black/40 p-1.5 rounded-2xl border border-white/10">
+                    <button id="user-btn-iker" onclick="switchUser('iker')" 
+                        class="flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 bg-blue-600 text-white shadow-lg shadow-blue-600/30">
+                        <i class="fa-solid fa-mars text-blue-200"></i>
+                        <span>Iker</span>
+                    </button>
+                    <button id="user-btn-sara" onclick="switchUser('sara')" 
+                        class="flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-semibold text-gray-400 hover:text-white transition-all duration-300">
+                        <i class="fa-solid fa-venus text-pink-400"></i>
+                        <span>Sara</span>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- MAIN SECTION NAVIGATION TABS -->
+        <div class="border-t border-white/5 bg-black/20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-center sm:justify-start space-x-2 sm:space-x-6 py-2">
+                <button onclick="switchTab('armario')" id="tab-btn-armario" 
+                    class="nav-tab px-4 py-2 rounded-lg text-sm font-medium text-white bg-white/10 flex items-center gap-2 transition-all">
+                    <i class="fa-solid fa-boxes-packing"></i>
+                    <span>Mi Armario</span>
+                </button>
+                <button onclick="switchTab('outfits')" id="tab-btn-outfits" 
+                    class="nav-tab px-4 py-2 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 flex items-center gap-2 transition-all">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <span>Generador Outfits</span>
+                </button>
+                <button onclick="switchTab('wishlist')" id="tab-btn-wishlist" 
+                    class="nav-tab px-4 py-2 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 flex items-center gap-2 transition-all">
+                    <i class="fa-solid fa-heart"></i>
+                    <span>Wishlist</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+
+        <!-- ================= TAB 1: MI ARMARIO ================= -->
+        <section id="tab-armario" class="space-y-6">
+            
+            <!-- Header section & Add button -->
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-darkcard p-6 rounded-2xl border border-darkborder shadow-xl">
+                <div>
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                        <span>Armario de</span> 
+                        <span id="current-user-name" class="text-blue-400 transition-colors duration-300">Iker</span>
+                    </h2>
+                    <p class="text-sm text-gray-400 mt-1">Organiza tu ropa por temporadas y tipos. Filtra y añade nuevas prendas fácilmente.</p>
+                </div>
+                <button onclick="openAddClothModal()" class="action-btn px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-blue-600/25 transition-all">
+                    <i class="fa-solid fa-plus text-lg"></i>
+                    <span>Añadir Prenda</span>
+                </button>
+            </div>
+
+            <!-- FILTERS BAR -->
+            <div class="glass-panel p-4 rounded-2xl flex flex-wrap items-center justify-between gap-4">
+                
+                <!-- Filter Temporada -->
+                <div class="flex items-center space-x-2 overflow-x-auto pb-1 sm:pb-0">
+                    <span class="text-xs uppercase font-bold text-gray-500 mr-2 tracking-wider">Temporada:</span>
+                    <button onclick="setFilterSeason('todos')" id="filter-season-todos" class="season-filter-btn text-xs px-3 py-1.5 rounded-lg bg-white/10 text-white font-medium border border-white/10">Todas</button>
+                    <button onclick="setFilterSeason('verano')" id="filter-season-verano" class="season-filter-btn text-xs px-3 py-1.5 rounded-lg bg-black/40 text-gray-400 hover:text-white border border-white/5">Verano</button>
+                    <button onclick="setFilterSeason('invierno')" id="filter-season-invierno" class="season-filter-btn text-xs px-3 py-1.5 rounded-lg bg-black/40 text-gray-400 hover:text-white border border-white/5">Invierno</button>
+                    <button onclick="setFilterSeason('deportiva')" id="filter-season-deportiva" class="season-filter-btn text-xs px-3 py-1.5 rounded-lg bg-black/40 text-gray-400 hover:text-white border border-white/5">Deportiva</button>
+                </div>
+
+                <!-- Filter Subtipo -->
+                <div class="flex items-center space-x-2">
+                    <span class="text-xs uppercase font-bold text-gray-500 mr-1 tracking-wider">Categoría:</span>
+                    <select id="filter-category-select" onchange="applyFilters()" class="bg-black/60 border border-darkborder text-xs rounded-lg px-3 py-1.5 text-gray-300 focus:outline-none focus:border-blue-500">
+                        <option value="todas">Todas las prendas</option>
+                        <optgroup label="Superiores">
+                            <option value="jerseys">Jerseys</option>
+                            <option value="camisas">Camisas</option>
+                            <option value="camisetas">Camisetas</option>
+                            <option value="cazadoras">Cazadoras</option>
+                        </optgroup>
+                        <optgroup label="Inferiores">
+                            <option value="jeans">Jeans</option>
+                            <option value="pantalones">Pantalones</option>
+                            <option value="bermudas">Bermudas</option>
+                            <option value="faldas" id="option-falda-filter" class="hidden">Faldas</option>
+                        </optgroup>
+                        <optgroup label="Calzado">
+                            <option value="zapatillas">Zapatillas</option>
+                            <option value="zapatos">Zapatos</option>
+                            <option value="botas">Botas</option>
+                            <option value="sandalias">Sandalias</option>
+                        </optgroup>
+                        <optgroup label="Accesorios">
+                            <option value="relojes">Relojes</option>
+                            <option value="gafas">Gafas de sol</option>
+                            <option value="gorras">Gorras / Sombreros</option>
+                            <option value="bufandas">Bufandas / Cinturones</option>
+                            <option value="bolsos">Bolsos / Mochilas</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+            </div>
+
+            <!-- CLOTHES GRID -->
+            <div id="clothes-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
+                <!-- Dynamically Populated -->
+            </div>
+
+            <!-- Empty Clothes State -->
+            <div id="clothes-empty-state" class="hidden text-center py-16 bg-darkcard/50 rounded-2xl border border-dashed border-darkborder">
+                <i class="fa-solid fa-shirt text-4xl text-gray-600 mb-3"></i>
+                <h3 class="text-lg font-medium text-gray-300">No se encontraron prendas</h3>
+                <p class="text-xs text-gray-500 mt-1">Intenta cambiar los filtros o añade ropa a tu armario.</p>
+            </div>
+
+        </section>
+
+        <!-- ================= TAB 2: GENERADOR DE OUTFITS ================= -->
+        <section id="tab-outfits" class="hidden space-y-6">
+            
+            <div class="bg-gradient-to-r from-darkcard via-black to-darkcard p-6 sm:p-8 rounded-2xl border border-darkborder shadow-xl text-center max-w-3xl mx-auto">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center text-white text-2xl mx-auto mb-4 shadow-lg shadow-purple-500/30">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Generador de Outfits Inteligente</h2>
+                <p class="text-sm text-gray-400 mt-2 max-w-lg mx-auto">Selecciona la ocasión o temporada y deja que el algoritmo cree la mejor combinación de partes superiores e inferiores.</p>
+                
+                <!-- Season selector for generator -->
+                <div class="flex justify-center items-center gap-3 mt-6">
+                    <select id="outfit-season-select" class="bg-black/80 border border-white/20 text-sm font-medium rounded-xl px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="verano">☀️ Outfits de Verano</option>
+                        <option value="invierno">❄️ Outfits de Invierno</option>
+                        <option value="deportiva">⚽ Ropa Deportiva</option>
+                    </select>
+                    
+                    <button onclick="generateOutfitCombination()" class="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/25 flex items-center gap-2 transition-all">
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                        <span>Proponer Outfits</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- OUTFIT RESULT CARDS -->
+            <div id="outfits-container" class="space-y-6">
+                <!-- Dynamically Populated Outfits -->
+            </div>
+
+        </section>
+
+        <!-- ================= TAB 3: WISHLIST ================= -->
+        <section id="tab-wishlist" class="hidden space-y-6">
+            
+            <!-- Header section & Add wishlist button -->
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-darkcard p-6 rounded-2xl border border-darkborder shadow-xl">
+                <div>
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                        <span>Lista de Deseos de</span> 
+                        <span id="wishlist-user-name" class="text-blue-400">Iker</span>
+                    </h2>
+                    <p class="text-sm text-gray-400 mt-1">Guarda las prendas que quieres comprar en tus tiendas favoritas.</p>
+                </div>
+                <button onclick="openWishlistModal()" class="action-btn px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold flex items-center justify-center gap-2 shadow-lg shadow-blue-600/25 transition-all">
+                    <i class="fa-solid fa-plus text-lg"></i>
+                    <span>Añadir a Wishlist</span>
+                </button>
+            </div>
+
+            <!-- WISHLIST GRID -->
+            <div id="wishlist-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Dynamically Populated -->
+            </div>
+
+            <!-- Empty Wishlist State -->
+            <div id="wishlist-empty-state" class="hidden text-center py-16 bg-darkcard/50 rounded-2xl border border-dashed border-darkborder">
+                <i class="fa-solid fa-heart-crack text-4xl text-gray-600 mb-3"></i>
+                <h3 class="text-lg font-medium text-gray-300">Tu Wishlist está vacía</h3>
+                <p class="text-xs text-gray-500 mt-1">Agrega prendas que te gustaría tener en el futuro.</p>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-darkborder py-6 bg-black/40 text-center text-xs text-gray-500">
+        <p>Smart Wardrobe &copy; 2026 - Moda e Inteligencia de Armario para Iker & Sara</p>
+    </footer>
+
+    <!-- ================= MODALS ================= -->
+
+    <!-- MODAL: AÑADIR / EDITAR PRENDA -->
+    <div id="modal-cloth" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm hidden p-4 overflow-y-auto">
+        <div class="glass-panel bg-darkcard border border-darkborder w-full max-w-lg rounded-2xl shadow-2xl p-6 relative max-h-[90vh] overflow-y-auto">
+            
+            <button onclick="closeClothModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <h3 id="modal-cloth-title" class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-shirt text-blue-400"></i> Añadir Prenda
+            </h3>
+
+            <form id="form-cloth" onsubmit="saveCloth(event)" class="space-y-4">
+                <input type="hidden" id="cloth-id">
+
+                <!-- Upload Image Area -->
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 uppercase mb-2">Foto de la prenda</label>
+                    <div class="flex items-center justify-center w-full">
+                        <label for="cloth-img-input" class="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-600 rounded-xl cursor-pointer bg-black/40 hover:bg-black/60 transition-all relative overflow-hidden group">
+                            <div id="cloth-img-placeholder" class="flex flex-col items-center justify-center pt-5 pb-6">
+                                <i class="fa-solid fa-cloud-arrow-up text-3xl text-gray-400 group-hover:scale-110 transition-transform mb-2"></i>
+                                <p class="text-xs text-gray-400"><span class="font-semibold">Subir foto</span> o arrastrar archivo</p>
+                                <p class="text-[10px] text-gray-500 mt-1">PNG, JPG o WEBP</p>
+                            </div>
+                            <img id="cloth-img-preview" class="hidden absolute inset-0 w-full h-full object-cover">
+                            <input id="cloth-img-input" type="file" accept="image/*" class="hidden" onchange="handleClothImageUpload(event)" />
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Simulación IA Auto-detect notice -->
+                <div id="ai-detection-badge" class="hidden p-3 bg-blue-950/40 border border-blue-500/30 rounded-xl flex items-center gap-3 text-xs text-blue-300">
+                    <i class="fa-solid fa-wand-magic-sparkles text-blue-400 animate-pulse text-base"></i>
+                    <div>
+                        <span class="font-bold">Análisis Inteligente:</span>
+                        <span id="ai-detection-text">Detección completada</span>
+                    </div>
+                </div>
+
+                <!-- Nombre / Descripción -->
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Nombre o Descripción</label>
+                    <input type="text" id="cloth-name" required placeholder="Ej: Camiseta Oversize Negra" class="w-full bg-black/60 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+                </div>
+
+                <!-- Temporada & Tipo (Sección) -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Temporada</label>
+                        <select id="cloth-season" required onchange="updateClothSubtypes()" class="w-full bg-black/60 border border-darkborder rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+                            <option value="verano">Verano</option>
+                            <option value="invierno">Invierno</option>
+                            <option value="deportiva">Deportiva</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Tipo de Parte</label>
+                        <select id="cloth-type" required onchange="updateClothSubtypes()" class="w-full bg-black/60 border border-darkborder rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+                            <option value="superior">Parte Superior</option>
+                            <option value="inferior">Parte Inferior</option>
+                            <option value="calzado">Calzado</option>
+                            <option value="accesorio">Accesorio</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Subtipo & Color -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Categoría Especifica</label>
+                        <select id="cloth-subtype" required class="w-full bg-black/60 border border-darkborder rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Color Predominante</label>
+                        <input type="text" id="cloth-color" required placeholder="Ej: Negro, Azul, Blanco..." class="w-full bg-black/60 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex justify-end space-x-3 pt-4 border-t border-darkborder">
+                    <button type="button" onclick="closeClothModal()" class="px-4 py-2 rounded-xl text-sm font-medium text-gray-400 hover:text-white bg-black/40 border border-white/10">Cancelar</button>
+                    <button type="submit" class="action-btn px-5 py-2 rounded-xl text-sm font-semibold text-white bg-blue-600 hover:bg-blue-500 shadow-lg shadow-blue-600/30">Guardar Prenda</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+
+    <!-- MODAL: AÑADIR / EDITAR WISHLIST ITEM -->
+    <div id="modal-wishlist" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm hidden p-4 overflow-y-auto">
+        <div class="glass-panel bg-darkcard border border-darkborder w-full max-w-lg rounded-2xl shadow-2xl p-6 relative max-h-[90vh] overflow-y-auto">
+            
+            <button onclick="closeWishlistModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <h3 id="modal-wishlist-title" class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-heart text-pink-500"></i> Añadir a Wishlist
+            </h3>
+
+            <form id="form-wishlist" onsubmit="saveWishlistItem(event)" class="space-y-4">
+                <input type="hidden" id="wishlist-id">
+
+                <!-- Upload Image or URL -->
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Imagen del Producto</label>
+                    <div class="flex flex-col gap-2">
+                        <input type="file" id="wishlist-img-file" accept="image/*" class="text-xs text-gray-400 bg-black/40 border border-darkborder rounded-lg p-2" onchange="handleWishlistImageUpload(event)">
+                        <input type="url" id="wishlist-img-url" placeholder="O pega URL de la imagen..." class="w-full bg-black/60 border border-darkborder rounded-xl px-4 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+
+                <!-- Nombre -->
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Nombre de la Prenda</label>
+                    <input type="text" id="wishlist-name" required placeholder="Ej: Chaqueta de Cuero Vintage" class="w-full bg-black/60 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+                </div>
+
+                <!-- Tienda & Precio -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Tienda</label>
+                        <input type="text" id="wishlist-store" required placeholder="Ej: Zara, Nike, Mango" class="w-full bg-black/60 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Precio (€)</label>
+                        <input type="number" step="0.01" id="wishlist-price" required placeholder="49.99" class="w-full bg-black/60 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+
+                <!-- Enlace de compra -->
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 uppercase mb-1">Enlace / Web de Compra</label>
+                    <input type="url" id="wishlist-url" placeholder="https://www.tienda.com/producto" class="w-full bg-black/60 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+                </div>
+
+                <!-- Actions -->
+                <div class="flex justify-end space-x-3 pt-4 border-t border-darkborder">
+                    <button type="button" onclick="closeWishlistModal()" class="px-4 py-2 rounded-xl text-sm font-medium text-gray-400 hover:text-white bg-black/40 border border-white/10">Cancelar</button>
+                    <button type="submit" class="action-btn px-5 py-2 rounded-xl text-sm font-semibold text-white bg-blue-600 hover:bg-blue-500 shadow-lg shadow-blue-600/30">Guardar Wishlist</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- MAIN JAVASCRIPT APP LOGIC -->
+    <script>
+        // --- INITIAL DATA & PRELOAD SAMPLES ---
+        const initialData = {
+            iker: {
+                clothes: [
+                    { id: 'i1', name: 'Jersey Punto Beige', season: 'invierno', type: 'superior', subtype: 'jerseys', color: 'Beige', img: 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&w=600&q=80' },
+                    { id: 'i2', name: 'Camisa Blanca Casual', season: 'verano', type: 'superior', subtype: 'camisas', color: 'Blanco', img: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=600&q=80' },
+                    { id: 'i3', name: 'Camiseta Básica Negra', season: 'verano', type: 'superior', subtype: 'camisetas', color: 'Negro', img: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=600&q=80' },
+                    { id: 'i4', name: 'Cazadora Vaquera Retro', season: 'invierno', type: 'superior', subtype: 'cazadoras', color: 'Azul', img: 'https://images.unsplash.com/photo-1576995853123-5a10305d93c0?auto=format&fit=crop&w=600&q=80' },
+                    { id: 'i5', name: 'Jeans Slim Dark', season: 'invierno', type: 'inferior', subtype: 'jeans', color: 'Negro', img: 'https://images.unsplash.com/photo-1542272604-780c96856592?auto=format&fit=crop&w=600&q=80' },
+                    { id: 'i6', name: 'Pantalón Chino Beige', season: 'verano', type: 'inferior', subtype: 'pantalones', color: 'Beige', img: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?auto=format&fit=crop&w=600&q=80' },
+                    { id: 'i7', name: 'Bermuda Algodón Gris', season: 'verano', type: 'inferior', subtype: 'bermudas', color: 'Gris', img: 'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?auto=format&fit=crop&w=600&q=80' },
+                    { id: 'i8', name: 'Camiseta Running Pro', season: 'deportiva', type: 'superior', subtype: 'camisetas', color: 'Azul', img: 'https://images.unsplash.com/photo-1581655353564-df123a1eb820?auto=format&fit=crop&w=600&q=80' },
+                    { id: 'i9', name: 'Pantalón Jogger Training', season: 'deportiva', type: 'inferior', subtype: 'pantalones', color: 'Negro', img: 'https://images.unsplash.com/photo-1552902865-b72c031ac5ea?auto=format&fit=crop&w=600&q=80' },
+                    { id: 'i10', name: 'Zapatillas Blancas Urban', season: 'verano', type: 'calzado', subtype: 'zapatillas', color: 'Blanco', img: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=600&q=80' },
+                    { id: 'i11', name: 'Gafas de Sol Negras', season: 'verano', type: 'accesorio', subtype: 'gafas', color: 'Negro', img: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=600&q=80' }
+                ],
+                wishlist: [
+                    { id: 'iw1', name: 'Zapatillas Nike Air Max', store: 'Nike Store', price: 129.99, url: 'https://www.nike.com', img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80', purchased: false },
+                    { id: 'iw2', name: 'Chaqueta Bomber Verde Oliva', store: 'Zara', price: 69.95, url: 'https://www.zara.com', img: 'https://images.unsplash.com/photo-1548883354-7622d03aca27?auto=format&fit=crop&w=600&q=80', purchased: false }
+                ]
+            },
+            sara: {
+                clothes: [
+                    { id: 's1', name: 'Jersey Cropped Rosa', season: 'invierno', type: 'superior', subtype: 'jerseys', color: 'Rosa', img: 'https://images.unsplash.com/photo-1574201635302-388dd92a4c3f?auto=format&fit=crop&w=600&q=80' },
+                    { id: 's2', name: 'Blusa Seda Blanca', season: 'verano', type: 'superior', subtype: 'camisas', color: 'Blanco', img: 'https://images.unsplash.com/photo-1584030373081-f37b7bb4fa8e?auto=format&fit=crop&w=600&q=80' },
+                    { id: 's3', name: 'Cazadora Cuero Negra', season: 'invierno', type: 'superior', subtype: 'cazadoras', color: 'Negro', img: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=600&q=80' },
+                    { id: 's4', name: 'Falda Plisada Beige', season: 'verano', type: 'inferior', subtype: 'faldas', color: 'Beige', img: 'https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?auto=format&fit=crop&w=600&q=80' },
+                    { id: 's5', name: 'Jeans High Waist', season: 'invierno', type: 'inferior', subtype: 'jeans', color: 'Azul Clarito', img: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=600&q=80' },
+                    { id: 's6', name: 'Top Deportivo Fit', season: 'deportiva', type: 'superior', subtype: 'camisetas', color: 'Negro', img: 'https://images.unsplash.com/photo-1618242168899-72f0e7f9037c?auto=format&fit=crop&w=600&q=80' },
+                    { id: 's7', name: 'Leggings Seamless', season: 'deportiva', type: 'inferior', subtype: 'pantalones', color: 'Gris', img: 'https://images.unsplash.com/photo-1506629082955-511b1aa562c8?auto=format&fit=crop&w=600&q=80' },
+                    { id: 's8', name: 'Sandalias Elegantes Leather', season: 'verano', type: 'calzado', subtype: 'sandalias', color: 'Marrón', img: 'https://images.unsplash.com/photo-1562273138-f46be4ebdf33?auto=format&fit=crop&w=600&q=80' },
+                    { id: 's9', name: 'Bolso de Mano Elegante', season: 'verano', type: 'accesorio', subtype: 'bolsos', color: 'Beige', img: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=600&q=80' }
+                ],
+                wishlist: [
+                    { id: 'sw1', name: 'Bolso Elegante Cuero', store: 'Massimo Dutti', price: 99.95, url: 'https://www.massimodutti.com', img: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=600&q=80', purchased: false },
+                    { id: 'sw2', name: 'Vestido Lino Verano', store: 'Mango', price: 45.99, url: 'https://www.mango.com', img: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=600&q=80', purchased: false }
+                ]
+            }
+        };
+
+        // --- GLOBAL APP STATE ---
+        let currentUser = 'iker'; // 'iker' or 'sara'
+        let currentTab = 'armario'; // 'armario', 'outfits', 'wishlist'
+        let currentFilterSeason = 'todos';
+        let currentUploadedImageBase64 = null;
+        let currentWishlistImageBase64 = null;
+
+        // --- APP INITIALIZATION ---
+        window.onload = function() {
+            // Load from LocalStorage if available
+            if (!localStorage.getItem('smart_wardrobe_data')) {
+                localStorage.setItem('smart_wardrobe_data', JSON.stringify(initialData));
+            }
+            
+            // Set initial User theme styling & Render
+            updateUserUI();
+            renderClothes();
+            renderWishlist();
+        };
+
+        function getStoredData() {
+            return JSON.parse(localStorage.getItem('smart_wardrobe_data')) || initialData;
+        }
+
+        function saveStoredData(data) {
+            localStorage.setItem('smart_wardrobe_data', JSON.stringify(data));
+        }
+
+        // --- USER & TAB NAVIGATION SWITCHING ---
+        function switchUser(user) {
+            currentUser = user;
+            updateUserUI();
+            renderClothes();
+            renderWishlist();
+            if (currentTab === 'outfits') {
+                generateOutfitCombination();
+            }
+        }
+
+        function updateUserUI() {
+            const ikerBtn = document.getElementById('user-btn-iker');
+            const saraBtn = document.getElementById('user-btn-sara');
+            const brandIcon = document.getElementById('brand-icon');
+            const currentNameEl = document.getElementById('current-user-name');
+            const wishlistNameEl = document.getElementById('wishlist-user-name');
+            const optionFaldaFilter = document.getElementById('option-falda-filter');
+            const actionBtns = document.querySelectorAll('.action-btn');
+
+            if (currentUser === 'iker') {
+                ikerBtn.className = "flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 bg-blue-600 text-white shadow-lg shadow-blue-600/30";
+                saraBtn.className = "flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-semibold text-gray-400 hover:text-white transition-all duration-300";
+                brandIcon.className = "w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white shadow-lg shadow-blue-500/20 transition-all duration-300";
+                currentNameEl.textContent = "Iker (Chico)";
+                currentNameEl.className = "text-blue-400 transition-colors duration-300";
+                wishlistNameEl.textContent = "Iker";
+                wishlistNameEl.className = "text-blue-400";
+                optionFaldaFilter.classList.add('hidden');
+
+                actionBtns.forEach(btn => {
+                    btn.classList.remove('bg-pink-600', 'hover:bg-pink-500', 'shadow-pink-600/30', 'shadow-pink-600/25');
+                    btn.classList.add('bg-blue-600', 'hover:bg-blue-500', 'shadow-blue-600/30', 'shadow-blue-600/25');
+                });
+
+            } else {
+                saraBtn.className = "flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 bg-pink-600 text-white shadow-lg shadow-pink-600/30";
+                ikerBtn.className = "flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-semibold text-gray-400 hover:text-white transition-all duration-300";
+                brandIcon.className = "w-10 h-10 rounded-xl bg-gradient-to-tr from-pink-600 to-rose-400 flex items-center justify-center text-white shadow-lg shadow-pink-500/20 transition-all duration-300";
+                currentNameEl.textContent = "Sara (Chica)";
+                currentNameEl.className = "text-pink-400 transition-colors duration-300";
+                wishlistNameEl.textContent = "Sara";
+                wishlistNameEl.className = "text-pink-400";
+                optionFaldaFilter.classList.remove('hidden');
+
+                actionBtns.forEach(btn => {
+                    btn.classList.remove('bg-blue-600', 'hover:bg-blue-500', 'shadow-blue-600/30', 'shadow-blue-600/25');
+                    btn.classList.add('bg-pink-600', 'hover:bg-pink-500', 'shadow-pink-600/30', 'shadow-pink-600/25');
+                });
+            }
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            // Toggle visibility of sections
+            document.getElementById('tab-armario').classList.toggle('hidden', tab !== 'armario');
+            document.getElementById('tab-outfits').classList.toggle('hidden', tab !== 'outfits');
+            document.getElementById('tab-wishlist').classList.toggle('hidden', tab !== 'wishlist');
+
+            // Style active buttons
+            const activeColor = currentUser === 'iker' ? 'bg-white/10 text-white' : 'bg-white/10 text-white';
+            ['armario', 'outfits', 'wishlist'].forEach(t => {
+                const btn = document.getElementById(`tab-btn-${t}`);
+                if (t === tab) {
+                    btn.className = `nav-tab px-4 py-2 rounded-lg text-sm font-medium text-white bg-white/10 flex items-center gap-2 transition-all border border-white/10`;
+                } else {
+                    btn.className = `nav-tab px-4 py-2 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 flex items-center gap-2 transition-all border border-transparent`;
+                }
+            });
+
+            if (tab === 'outfits') {
+                generateOutfitCombination();
+            }
+        }
+
+        // --- ARMARIO / CLOTHES LOGIC & RENDER ---
+        function setFilterSeason(season) {
+            currentFilterSeason = season;
+            
+            // Update filter buttons appearance
+            const seasonBtns = document.querySelectorAll('.season-filter-btn');
+            seasonBtns.forEach(btn => {
+                btn.className = "season-filter-btn text-xs px-3 py-1.5 rounded-lg bg-black/40 text-gray-400 hover:text-white border border-white/5";
+            });
+
+            const activeBtn = document.getElementById(`filter-season-${season}`);
+            if (activeBtn) {
+                activeBtn.className = "season-filter-btn text-xs px-3 py-1.5 rounded-lg bg-white/10 text-white font-medium border border-white/10";
+            }
+
+            applyFilters();
+        }
+
+        function applyFilters() {
+            renderClothes();
+        }
+
+        function renderClothes() {
+            const data = getStoredData();
+            const userClothes = data[currentUser].clothes || [];
+            const grid = document.getElementById('clothes-grid');
+            const emptyState = document.getElementById('clothes-empty-state');
+            const categoryFilter = document.getElementById('filter-category-select').value;
+
+            grid.innerHTML = '';
+
+            // Filter logic
+            const filtered = userClothes.filter(item => {
+                const matchSeason = (currentFilterSeason === 'todos') || (item.season === currentFilterSeason);
+                const matchCategory = (categoryFilter === 'todas') || (item.subtype === categoryFilter);
+                return matchSeason && matchCategory;
+            });
+
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                
+                filtered.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = "glass-card rounded-2xl overflow-hidden flex flex-col group relative";
+                    
+                    // Season badge color
+                    let seasonBadge = item.season.toUpperCase();
+                    let seasonBadgeColor = "bg-blue-500/20 text-blue-300 border-blue-500/30";
+                    if (item.season === 'invierno') seasonBadgeColor = "bg-cyan-500/20 text-cyan-300 border-cyan-500/30";
+                    if (item.season === 'deportiva') seasonBadgeColor = "bg-emerald-500/20 text-emerald-300 border-emerald-500/30";
+
+                    card.innerHTML = `
+                        <div class="relative h-48 w-full bg-black/40 overflow-hidden">
+                            <img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/400x400/1e1e24/ffffff?text=Sin+Imagen'">
+                            <span class="absolute top-2 left-2 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md border ${seasonBadgeColor} backdrop-blur-md">
+                                ${seasonBadge}
+                            </span>
+                            <div class="absolute top-2 right-2 flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 p-1 rounded-xl backdrop-blur-md z-20">
+                                <button type="button" data-edit-id="${item.id}" class="btn-edit-cloth p-1.5 text-xs text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors" title="Editar">
+                                    <i class="fa-solid fa-pen pointer-events-none"></i>
+                                </button>
+                                <button type="button" data-delete-id="${item.id}" class="btn-delete-cloth p-1.5 text-xs text-red-400 hover:text-red-300 hover:bg-red-500/20 rounded-lg transition-colors" title="Eliminar">
+                                    <i class="fa-solid fa-trash pointer-events-none"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-4 flex flex-col flex-grow justify-between">
+                            <div>
+                                <div class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider flex justify-between">
+                                    <span>${item.type} • ${item.subtype}</span>
+                                </div>
+                                <h4 class="text-sm font-bold text-white mt-1 line-clamp-1">${item.name}</h4>
+                            </div>
+                            <div class="mt-3 pt-2 border-t border-white/5 flex items-center justify-between text-xs">
+                                <span class="text-gray-400">Color:</span>
+                                <span class="px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-gray-200 font-medium">${item.color}</span>
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+
+                // Attach event listeners explicitly to avoid inline execution issues
+                grid.querySelectorAll('.btn-edit-cloth').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        editCloth(btn.getAttribute('data-edit-id'));
+                    });
+                });
+
+                grid.querySelectorAll('.btn-delete-cloth').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        deleteCloth(btn.getAttribute('data-delete-id'));
+                    });
+                });
+            }
+        }
+
+        // --- MODAL & IMAGE ANALYSIS SIMULATION FOR CLOTHES ---
+        function openAddClothModal() {
+            document.getElementById('modal-cloth-title').innerHTML = `<i class="fa-solid fa-shirt text-${currentUser === 'iker' ? 'blue' : 'pink'}-400"></i> Añadir Prenda`;
+            document.getElementById('form-cloth').reset();
+            document.getElementById('cloth-id').value = '';
+            document.getElementById('cloth-img-preview').classList.add('hidden');
+            document.getElementById('cloth-img-placeholder').classList.remove('hidden');
+            document.getElementById('ai-detection-badge').classList.add('hidden');
+            currentUploadedImageBase64 = null;
+
+            updateClothSubtypes();
+            document.getElementById('modal-cloth').classList.remove('hidden');
+        }
+
+        function closeClothModal() {
+            document.getElementById('modal-cloth').classList.add('hidden');
+        }
+
+        function updateClothSubtypes() {
+            const season = document.getElementById('cloth-season').value;
+            const type = document.getElementById('cloth-type').value;
+            const subtypeSelect = document.getElementById('cloth-subtype');
+            subtypeSelect.innerHTML = '';
+
+            let options = [];
+            if (type === 'superior') {
+                options = ['jerseys', 'camisas', 'camisetas', 'cazadoras'];
+            } else if (type === 'inferior') {
+                options = ['jeans', 'pantalones', 'bermudas'];
+                if (currentUser === 'sara') {
+                    options.push('faldas');
+                }
+            } else if (type === 'calzado') {
+                options = ['zapatillas', 'zapatos', 'botas', 'sandalias'];
+            } else if (type === 'accesorio') {
+                options = ['relojes', 'gafas', 'gorras', 'bufandas', 'bolsos'];
+            }
+
+            options.forEach(opt => {
+                const el = document.createElement('option');
+                el.value = opt;
+                el.textContent = opt.charAt(0).toUpperCase() + opt.slice(1);
+                subtypeSelect.appendChild(el);
+            });
+        }
+
+        function simulateAiImageAnalysis(fileName) {
+            const nameLower = fileName.toLowerCase();
+            const badge = document.getElementById('ai-detection-badge');
+            const text = document.getElementById('ai-detection-text');
+            badge.classList.remove('hidden');
+
+            let detectedColor = "Negro";
+            let detectedSubtype = "camisetas";
+            let detectedType = "superior";
+            let detectedSeason = "verano";
+
+            // Simulated color detection heuristics
+            if (nameLower.includes('blanc') || nameLower.includes('white')) detectedColor = "Blanco";
+            else if (nameLower.includes('azul') || nameLower.includes('blue')) detectedColor = "Azul";
+            else if (nameLower.includes('rojo') || nameLower.includes('red')) detectedColor = "Rojo";
+            else if (nameLower.includes('verde') || nameLower.includes('green')) detectedColor = "Verde";
+            else if (nameLower.includes('gris') || nameLower.includes('grey')) detectedColor = "Gris";
+            else if (nameLower.includes('beige')) detectedColor = "Beige";
+
+            // Simulated subtype detection
+            if (nameLower.includes('zapat') || nameLower.includes('bota') || nameLower.includes('sandalia') || nameLower.includes('sneaker')) {
+                detectedType = "calzado";
+                if (nameLower.includes('bota')) detectedSubtype = "botas";
+                else if (nameLower.includes('sandalia')) detectedSubtype = "sandalias";
+                else if (nameLower.includes('zapato')) detectedSubtype = "zapatos";
+                else detectedSubtype = "zapatillas";
+            } else if (nameLower.includes('reloj') || nameLower.includes('gafa') || nameLower.includes('gorra') || nameLower.includes('bolso') || nameLower.includes('cinturon')) {
+                detectedType = "accesorio";
+                if (nameLower.includes('reloj')) detectedSubtype = "relojes";
+                else if (nameLower.includes('gafa')) detectedSubtype = "gafas";
+                else if (nameLower.includes('gorra')) detectedSubtype = "gorras";
+                else if (nameLower.includes('bolso')) detectedSubtype = "bolsos";
+                else detectedSubtype = "bufandas";
+            } else if (nameLower.includes('pantalo') || nameLower.includes('jean') || nameLower.includes('bermuda') || nameLower.includes('falda')) {
+                detectedType = "inferior";
+                if (nameLower.includes('jean')) detectedSubtype = "jeans";
+                else if (nameLower.includes('bermuda')) detectedSubtype = "bermudas";
+                else if (nameLower.includes('falda')) detectedSubtype = "faldas";
+                else detectedSubtype = "pantalones";
+            } else if (nameLower.includes('jersey') || nameLower.includes('sueter')) {
+                detectedSubtype = "jerseys";
+                detectedSeason = "invierno";
+            } else if (nameLower.includes('camisa')) {
+                detectedSubtype = "camisas";
+            } else if (nameLower.includes('cazadora') || nameLower.includes('chaqueta')) {
+                detectedSubtype = "cazadoras";
+                detectedSeason = "invierno";
+            }
+
+            // Fill form fields automatically
+            document.getElementById('cloth-color').value = detectedColor;
+            document.getElementById('cloth-season').value = detectedSeason;
+            document.getElementById('cloth-type').value = detectedType;
+            updateClothSubtypes();
+            document.getElementById('cloth-subtype').value = detectedSubtype;
+
+            if (!document.getElementById('cloth-name').value) {
+                document.getElementById('cloth-name').value = `${detectedSubtype.charAt(0).toUpperCase() + detectedSubtype.slice(1)} ${detectedColor}`;
+            }
+
+            text.textContent = `Prenda detectada: ${detectedSubtype.toUpperCase()} - Color: ${detectedColor}`;
+        }
+
+        function saveCloth(e) {
+            e.preventDefault();
+            const data = getStoredData();
+            const id = document.getElementById('cloth-id').value;
+            const name = document.getElementById('cloth-name').value;
+            const season = document.getElementById('cloth-season').value;
+            const type = document.getElementById('cloth-type').value;
+            const subtype = document.getElementById('cloth-subtype').value;
+            const color = document.getElementById('cloth-color').value;
+
+            let imgSrc = currentUploadedImageBase64;
+
+            if (id) {
+                // Edit existing
+                const index = data[currentUser].clothes.findIndex(c => c.id === id);
+                if (index !== -1) {
+                    if (!imgSrc) imgSrc = data[currentUser].clothes[index].img;
+                    data[currentUser].clothes[index] = { id, name, season, type, subtype, color, img: imgSrc };
+                }
+            } else {
+                // Create new
+                if (!imgSrc) {
+                    imgSrc = 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=600&q=80';
+                }
+                const newCloth = {
+                    id: 'c_' + Date.now(),
+                    name, season, type, subtype, color, img: imgSrc
+                };
+                data[currentUser].clothes.unshift(newCloth);
+            }
+
+            saveStoredData(data);
+            closeClothModal();
+            renderClothes();
+        }
+
+        function editCloth(id) {
+            const data = getStoredData();
+            const cloth = data[currentUser].clothes.find(c => c.id === id);
+            if (!cloth) return;
+
+            document.getElementById('modal-cloth-title').textContent = "Editar Prenda";
+            document.getElementById('cloth-id').value = cloth.id;
+            document.getElementById('cloth-name').value = cloth.name;
+            document.getElementById('cloth-season').value = cloth.season;
+            document.getElementById('cloth-type').value = cloth.type;
+            updateClothSubtypes();
+            document.getElementById('cloth-subtype').value = cloth.subtype;
+            document.getElementById('cloth-color').value = cloth.color;
+
+            const preview = document.getElementById('cloth-img-preview');
+            preview.src = cloth.img;
+            preview.classList.remove('hidden');
+            document.getElementById('cloth-img-placeholder').classList.add('hidden');
+            currentUploadedImageBase64 = cloth.img;
+
+            document.getElementById('modal-cloth').classList.remove('hidden');
+        }
+
+        function deleteCloth(id) {
+            const data = getStoredData();
+            data[currentUser].clothes = (data[currentUser].clothes || []).filter(c => String(c.id) !== String(id));
+            saveStoredData(data);
+            renderClothes();
+            if (currentTab === 'outfits') {
+                generateOutfitCombination();
+            }
+        }
+
+        // --- OUTFIT GENERATOR LOGIC ---
+        function generateOutfitCombination() {
+            const season = document.getElementById('outfit-season-select').value;
+            const data = getStoredData();
+            const userClothes = data[currentUser].clothes || [];
+            const container = document.getElementById('outfits-container');
+
+            container.innerHTML = '';
+
+            // Filter available clothes by season and type
+            const uppers = userClothes.filter(c => c.season === season && c.type === 'superior');
+            const lowers = userClothes.filter(c => c.season === season && c.type === 'inferior');
+            const footwear = userClothes.filter(c => c.season === season && c.type === 'calzado');
+
+            if (uppers.length === 0 || lowers.length === 0) {
+                container.innerHTML = `
+                    <div class="glass-panel p-8 text-center rounded-2xl border border-dashed border-darkborder max-w-xl mx-auto">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-400 text-3xl mb-3"></i>
+                        <h4 class="text-base font-bold text-white">Prendas Insuficientes</h4>
+                        <p class="text-xs text-gray-400 mt-1">Necesitas tener al menos una parte superior y una parte inferior registradas para la temporada "${season.toUpperCase()}" en el armario de ${currentUser.toUpperCase()}.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Generate combinations randomly
+            const combinationsCount = Math.min(2, Math.max(1, Math.min(uppers.length, lowers.length)));
+            const usedUpperIndexes = new Set();
+            const usedLowerIndexes = new Set();
+            const usedFootwearIndexes = new Set();
+
+            for (let i = 0; i < combinationsCount; i++) {
+                let uIdx, lIdx, fIdx = null;
+                
+                do {
+                    uIdx = Math.floor(Math.random() * uppers.length);
+                } while (usedUpperIndexes.has(uIdx) && usedUpperIndexes.size < uppers.length);
+                usedUpperIndexes.add(uIdx);
+
+                do {
+                    lIdx = Math.floor(Math.random() * lowers.length);
+                } while (usedLowerIndexes.has(lIdx) && usedLowerIndexes.size < lowers.length);
+                usedLowerIndexes.add(lIdx);
+
+                if (footwear.length > 0) {
+                    do {
+                        fIdx = Math.floor(Math.random() * footwear.length);
+                    } while (usedFootwearIndexes.has(fIdx) && usedFootwearIndexes.size < footwear.length);
+                    usedFootwearIndexes.add(fIdx);
+                }
+
+                const topItem = uppers[uIdx];
+                const bottomItem = lowers[lIdx];
+                const footwearItem = fIdx !== null ? footwear[fIdx] : null;
+
+                // Create Outfit Suggestion Card
+                const outfitCard = document.createElement('div');
+                outfitCard.className = "glass-panel p-6 rounded-2xl max-w-4xl mx-auto border border-white/10 shadow-2xl relative overflow-hidden";
+                
+                outfitCard.innerHTML = `
+                    <div class="flex items-center justify-between pb-4 mb-6 border-b border-white/10">
+                        <div class="flex items-center space-x-3">
+                            <span class="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-sm">#${i+1}</span>
+                            <div>
+                                <h3 class="text-lg font-bold text-white">Combinación ${season.toUpperCase()}</h3>
+                                <p class="text-xs text-gray-400">Armonía de Colores: ${topItem.color} + ${bottomItem.color} ${footwearItem ? '+ ' + footwearItem.color : ''}</p>
+                            </div>
+                        </div>
+                        <span class="text-xs px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center gap-1 font-medium">
+                            <i class="fa-solid fa-check"></i> Match Sugerido
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-1 ${footwearItem ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-4 items-center">
+                        <!-- Top item card -->
+                        <div class="bg-black/40 rounded-xl p-4 border border-white/5 flex items-center space-x-3">
+                            <img src="${topItem.img}" alt="${topItem.name}" class="w-20 h-20 object-cover rounded-lg border border-darkborder flex-shrink-0">
+                            <div>
+                                <span class="text-[10px] text-blue-400 uppercase font-bold tracking-wider">Parte Superior</span>
+                                <h4 class="text-xs font-bold text-white mt-1 line-clamp-1">${topItem.name}</h4>
+                                <div class="text-[11px] text-gray-400 mt-1">Categoría: ${topItem.subtype}</div>
+                                <div class="text-[11px] text-gray-400">Color: <span class="text-gray-200 font-medium">${topItem.color}</span></div>
+                            </div>
+                        </div>
+
+                        <!-- Bottom item card -->
+                        <div class="bg-black/40 rounded-xl p-4 border border-white/5 flex items-center space-x-3">
+                            <img src="${bottomItem.img}" alt="${bottomItem.name}" class="w-20 h-20 object-cover rounded-lg border border-darkborder flex-shrink-0">
+                            <div>
+                                <span class="text-[10px] text-pink-400 uppercase font-bold tracking-wider">Parte Inferior</span>
+                                <h4 class="text-xs font-bold text-white mt-1 line-clamp-1">${bottomItem.name}</h4>
+                                <div class="text-[11px] text-gray-400 mt-1">Categoría: ${bottomItem.subtype}</div>
+                                <div class="text-[11px] text-gray-400">Color: <span class="text-gray-200 font-medium">${bottomItem.color}</span></div>
+                            </div>
+                        </div>
+
+                        <!-- Footwear card (if available) -->
+                        ${footwearItem ? `
+                            <div class="bg-black/40 rounded-xl p-4 border border-white/5 flex items-center space-x-3">
+                                <img src="${footwearItem.img}" alt="${footwearItem.name}" class="w-20 h-20 object-cover rounded-lg border border-darkborder flex-shrink-0">
+                                <div>
+                                    <span class="text-[10px] text-purple-400 uppercase font-bold tracking-wider">Calzado</span>
+                                    <h4 class="text-xs font-bold text-white mt-1 line-clamp-1">${footwearItem.name}</h4>
+                                    <div class="text-[11px] text-gray-400 mt-1">Categoría: ${footwearItem.subtype}</div>
+                                    <div class="text-[11px] text-gray-400">Color: <span class="text-gray-200 font-medium">${footwearItem.color}</span></div>
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+                container.appendChild(outfitCard);
+            }
+        }
+
+        // --- WISHLIST LOGIC & RENDER ---
+        function renderWishlist() {
+            const data = getStoredData();
+            const items = data[currentUser].wishlist || [];
+            const grid = document.getElementById('wishlist-grid');
+            const emptyState = document.getElementById('wishlist-empty-state');
+
+            grid.innerHTML = '';
+
+            if (items.length === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+
+                items.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = `glass-card rounded-2xl overflow-hidden flex flex-col group relative ${item.purchased ? 'opacity-60' : ''}`;
+                    
+                    card.innerHTML = `
+                        <div class="relative h-52 w-full bg-black/40 overflow-hidden">
+                            <img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/400x400/1e1e24/ffffff?text=Wishlist+Item'">
+                            
+                            <!-- Purchased Badge -->
+                            ${item.purchased ? `
+                                <div class="absolute inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center">
+                                    <span class="bg-emerald-600 text-white font-bold text-xs px-3 py-1 rounded-full shadow-lg">COMPRADO</span>
+                                </div>
+                            ` : ''}
+
+                            <div class="absolute top-2 right-2 flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 p-1 rounded-xl backdrop-blur-md z-20">
+                                <button type="button" data-edit-wish-id="${item.id}" class="btn-edit-wishlist p-1.5 text-xs text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors" title="Editar">
+                                    <i class="fa-solid fa-pen pointer-events-none"></i>
+                                </button>
+                                <button type="button" data-delete-wish-id="${item.id}" class="btn-delete-wishlist p-1.5 text-xs text-red-400 hover:text-red-300 hover:bg-red-500/20 rounded-lg transition-colors" title="Eliminar">
+                                    <i class="fa-solid fa-trash pointer-events-none"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="p-4 flex flex-col flex-grow justify-between">
+                            <div>
+                                <span class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">${item.store}</span>
+                                <h4 class="text-sm font-bold text-white mt-0.5 line-clamp-1">${item.name}</h4>
+                                <p class="text-base font-extrabold text-emerald-400 mt-2">${item.price.toFixed(2)} €</p>
+                            </div>
+
+                            <div class="mt-4 pt-3 border-t border-white/5 flex items-center justify-between gap-2">
+                                <button type="button" onclick="togglePurchased('${item.id}')" class="text-xs px-3 py-1.5 rounded-lg border border-white/10 ${item.purchased ? 'bg-emerald-600/20 text-emerald-300' : 'bg-white/5 text-gray-300 hover:text-white'} transition-colors">
+                                    <i class="fa-solid ${item.purchased ? 'fa-check-circle' : 'fa-circle'} mr-1"></i>
+                                    ${item.purchased ? 'Comprado' : 'Pendiente'}
+                                </button>
+
+                                ${item.url ? `
+                                    <a href="${item.url}" target="_blank" class="text-xs px-3 py-1.5 rounded-lg bg-blue-600/20 hover:bg-blue-600/40 text-blue-300 border border-blue-500/30 font-medium flex items-center gap-1 transition-colors">
+                                        <span>Ir a Tienda</span>
+                                        <i class="fa-solid fa-up-right-from-square text-[10px]"></i>
+                                    </a>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+
+                // Attach event listeners for wishlist
+                grid.querySelectorAll('.btn-edit-wishlist').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        editWishlistItem(btn.getAttribute('data-edit-wish-id'));
+                    });
+                });
+
+                grid.querySelectorAll('.btn-delete-wishlist').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        deleteWishlistItem(btn.getAttribute('data-delete-wish-id'));
+                    });
+                });
+            }
+        }
+
+        function openWishlistModal() {
+            document.getElementById('modal-wishlist-title').innerHTML = `<i class="fa-solid fa-heart text-${currentUser === 'iker' ? 'blue' : 'pink'}-500"></i> Añadir a Wishlist`;
+            document.getElementById('form-wishlist').reset();
+            document.getElementById('wishlist-id').value = '';
+            currentWishlistImageBase64 = null;
+            document.getElementById('modal-wishlist').classList.remove('hidden');
+        }
+
+        function closeWishlistModal() {
+            document.getElementById('modal-wishlist').classList.add('hidden');
+        }
+
+        function handleWishlistImageUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                currentWishlistImageBase64 = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function saveWishlistItem(e) {
+            e.preventDefault();
+            const data = getStoredData();
+            const id = document.getElementById('wishlist-id').value;
+            const name = document.getElementById('wishlist-name').value;
+            const store = document.getElementById('wishlist-store').value;
+            const price = parseFloat(document.getElementById('wishlist-price').value) || 0;
+            const url = document.getElementById('wishlist-url').value;
+            const urlImg = document.getElementById('wishlist-img-url').value;
+
+            let imgSrc = currentWishlistImageBase64 || urlImg;
+
+            if (id) {
+                const index = data[currentUser].wishlist.findIndex(w => w.id === id);
+                if (index !== -1) {
+                    if (!imgSrc) imgSrc = data[currentUser].wishlist[index].img;
+                    data[currentUser].wishlist[index] = {
+                        ...data[currentUser].wishlist[index],
+                        name, store, price, url, img: imgSrc
+                    };
+                }
+            } else {
+                if (!imgSrc) {
+                    imgSrc = 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?auto=format&fit=crop&w=600&q=80';
+                }
+                const newItem = {
+                    id: 'w_' + Date.now(),
+                    name, store, price, url, img: imgSrc, purchased: false
+                };
+                data[currentUser].wishlist.unshift(newItem);
+            }
+
+            saveStoredData(data);
+            closeWishlistModal();
+            renderWishlist();
+        }
+
+        function editWishlistItem(id) {
+            const data = getStoredData();
+            const item = data[currentUser].wishlist.find(w => w.id === id);
+            if (!item) return;
+
+            document.getElementById('modal-wishlist-title').textContent = "Editar Wishlist";
+            document.getElementById('wishlist-id').value = item.id;
+            document.getElementById('wishlist-name').value = item.name;
+            document.getElementById('wishlist-store').value = item.store;
+            document.getElementById('wishlist-price').value = item.price;
+            document.getElementById('wishlist-url').value = item.url || '';
+            document.getElementById('wishlist-img-url').value = item.img.startsWith('http') ? item.img : '';
+
+            document.getElementById('modal-wishlist').classList.remove('hidden');
+        }
+
+        function togglePurchased(id) {
+            const data = getStoredData();
+            const item = data[currentUser].wishlist.find(w => w.id === id);
+            if (item) {
+                item.purchased = !item.purchased;
+                saveStoredData(data);
+                renderWishlist();
+            }
+        }
+
+        function deleteWishlistItem(id) {
+            const data = getStoredData();
+            data[currentUser].wishlist = (data[currentUser].wishlist || []).filter(w => String(w.id) !== String(id));
+            saveStoredData(data);
+            renderWishlist();
+        }
+    </script>
+</body>
+</html>
